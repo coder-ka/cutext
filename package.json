@@ -1,0 +1,32 @@
+{
+  "name": "cutext",
+  "version": "1.0.0",
+  "description": "Cutext is a parsing tool created for simple use in Node.",
+  "main": "lib",
+  "scripts": {
+    "build": "parcel build lib/index.js",
+    "watch": "parcel watch lib/index.js",
+    "test": "mocha --timeout 60000 --colors './test/**.spec.js'"
+  },
+  "keywords": [
+    "lightweight",
+    "parse",
+    "render"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coder-ka/cutext"
+  },
+  "bugs": {
+    "url": "https://github.com/coder-ka/cutext/issues",
+    "email": "coder.ka.issues@gmail.com"
+  },
+  "author": "coder-ka",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "parcel-bundler": "^1.12.3",
+    "sinon": "^7.3.0"
+  }
+}

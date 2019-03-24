@@ -84,7 +84,7 @@ new Cutter({
 });
 ```
 
-### **name**: `string?` [optional]
+### **name**: `string` [optional]
 
 **default**: `undefined`
 
@@ -94,7 +94,7 @@ Use for identify compiled tokens.
 
 ---
 
-### **startWith**: `RegExp?` [optional]
+### **startWith**: `RegExp` [optional]
 
 **default**: `undefined`
 
