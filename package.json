@@ -1,6 +1,6 @@
 {
   "name": "cutext",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cutext is a parsing tool created for simple use in Node.",
   "main": "lib",
   "scripts": {

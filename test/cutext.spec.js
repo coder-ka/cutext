@@ -13,14 +13,26 @@ describe('test', () => {
 `;
 
   it('render()', async () => {
-    const cutext = new Cutext();
+    const addtionalArgument = {
+      some: 'argument'
+    };
+
+    const cutext = new Cutext({
+      noPattermMatchedRenderer(text, arg) {
+        expect(this).instanceOf(Cutext);
+        expect(arg).to.eql(addtionalArgument);
+
+        return '';
+      }
+    });
 
     const cutters = cutext
       .addCutter({
         name: 'test cutter 1',
         regex: /^(#+)\s+(.+)[\r\n]*/,
-        parse([p1, p2]) {
+        parse([p1, p2], arg) {
           expect(this).instanceOf(Cutext);
+          expect(arg).to.eql(addtionalArgument);
 
           return {
             level: p1.length,
@@ -29,8 +41,9 @@ describe('test', () => {
         },
         render({
           level, text
-        }) {
+        }, arg) {
           expect(this).instanceOf(Cutext);
+          expect(arg).to.eql(addtionalArgument);
 
           expect(level).to.equal(1);
           expect(text).to.equal('title**titlebold**');
@@ -41,8 +54,9 @@ describe('test', () => {
       .addChainsaw({
         name: 'test cutter 2',
         regex: /^(>+)\s(.+)[\r\n]*/,
-        parse([p1, p2]) {
+        parse([p1, p2], arg) {
           expect(this).instanceOf(Cutext);
+          expect(arg).to.eql(addtionalArgument);
 
           return {
             indent: p1.length,
@@ -54,8 +68,9 @@ describe('test', () => {
 
           return txt.replace(/\*\*(.+)\*\*/, '<bold>')
         },
-        render(asts) {
+        render(asts, arg) {
           expect(this).instanceOf(Cutext);
+          expect(arg).to.eql(addtionalArgument);
 
           expect(asts).to.eql([{
             indent: 1,
@@ -70,9 +85,9 @@ describe('test', () => {
         multiple: true
       });
 
-    expect(cutters.render(src)).to.equal('header**bold**blockquote**bold**');
+    expect(cutters.render(src, addtionalArgument)).to.equal('header**bold**blockquote**bold**');
 
-    expect(cutters.compile(src)).to.eql([
+    expect(cutters.compile(src, addtionalArgument)).to.eql([
       {
         name: "test cutter 1",
         token: {

@@ -133,23 +133,25 @@ e.g. sanitization.
 
 ---
 
-### **parse**: `function(string[]):*` [optional]
+### **parse**: `function(string[], *):*` [optional]
 
 **default**: `matched => matched`
 
 Parse string and create object.
-A result array of `RegExp.exec().slice(1)` is passed.
+First argument is a result array of `RegExp.exec().slice(1)`.
+Second argument is Cutext.Render or Cutext.Compile method's second argument is passed.
 
 `this` context is instance of Cutext.
 
 ---
 
-### **render**: `function(*):string` [optional]
+### **render**: `function(*, *):string` [optional]
 
 **default**: `obj => JSON.stringify(obj)`
 
-Render object created in parse method to string.
+First argument is parse() method result.
 Array of Matched string is passed without parse method.
+Second argument is Cutext.Render or Cutext.Compile method's second argument is passed.
 
 `this` context is instance of Cutext.
 
@@ -224,3 +226,86 @@ Add Cutter rule to cutext object.
 Alias for `addCutter({...option, multiple: true})`
 
 ---
+
+### **compile**: `function(string, [*]): *`
+
+Make array of parse method result.
+
+---
+
+### **render**: `function(string, [*]): string`
+
+Render string by render method and return result string.
+
+---
+
+# Nested `compile()` or `render()` method
+
+You can handle nested structure.
+
+compile() example:
+
+```javascript
+const Cutext = require('cutext');
+
+const cutext = new Cutext();
+
+const cutters = cutext.addCutter({
+  name: 'header cutter',
+  regex: /^(#+) (.+)/,
+  // nest level is passed from render() method.
+  parse([p1, p2], nestLevel) {
+    return {
+      level: p1.length,
+      text: nestLevel === 1 ? p2 : this.compile(p2, nestLevel + 1)
+    }
+  }
+});
+
+console.log(cutters.compile('# # header', 0));
+// output:
+// [{
+//   "name": "header cutter",
+//   "token": {
+//     "level": 1,
+//     "text": [
+//       {
+//         "name": "header cutter",
+//         "token": {
+//           "level": 1,
+//           "text": "header"
+//         }
+//       }
+//     ]
+//   }
+// }]
+```
+
+---
+
+render() example:
+
+```javascript
+const Cutext = require('cutext');
+
+const cutext = new Cutext();
+
+const cutters = cutext.addCutter({
+  name: 'header cutter',
+  regex: /^(#+) (.+)/,
+  parse([p1, p2]) {
+    return {
+      level: p1.length,
+      text: p2
+    }
+  },
+  // nest level is passed from render() method.
+  render({ level, text }, nestLevel) {
+    return `<h${level + nestLevel}>${this.render(text, nestLevel + 1)}${nestLevel === 1 ? text : ''}</h${level + nestLevel}>`;
+  }
+});
+
+console.log(cutters.render('# # header', 0));
+// output:
+// <h1><h2>header</h2></h1>
+```
