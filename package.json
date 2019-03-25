@@ -6,7 +6,8 @@
   "scripts": {
     "build": "parcel build lib/index.js",
     "watch": "parcel watch lib/index.js",
-    "test": "mocha --timeout 60000 --colors './test/**.spec.js'"
+    "test": "mocha --timeout 60000 --colors './test/**.spec.js'",
+    "prepare": "npm run build"
   },
   "keywords": [
     "lightweight",

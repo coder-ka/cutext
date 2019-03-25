@@ -129,6 +129,8 @@ To transform only matched string.
 
 e.g. sanitization.
 
+`this` context is instance of Cutext.
+
 ---
 
 ### **parse**: `function(string[]):*` [optional]
@@ -138,6 +140,8 @@ e.g. sanitization.
 Parse string and create object.
 A result array of `RegExp.exec().slice(1)` is passed.
 
+`this` context is instance of Cutext.
+
 ---
 
 ### **render**: `function(*):string` [optional]
@@ -146,6 +150,8 @@ A result array of `RegExp.exec().slice(1)` is passed.
 
 Render object created in parse method to string.
 Array of Matched string is passed without parse method.
+
+`this` context is instance of Cutext.
 
 ---
 
